@@ -72,9 +72,6 @@ export const getDish = async (slug) => {
   return http.get(`${API}/dishes/${slug}`).then((r) => r.data);
 };
 
-export const reserveTable = (payload) =>
-  http.post(`${API}/reservations`, payload).then((r) => r.data);
-
 export async function streamChat(sessionId, message, onDelta) {
   const res = await fetch(`${API}/chat`, {
     method: "POST",

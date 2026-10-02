@@ -70,9 +70,6 @@ export const dishImageLarge = (src) => responsive(src, [400, 800], 1254, SIZES.d
 /** Region photographs: the chapter fallback when a loop will not play. */
 export const regionImage = (src) => responsive(src, [480, 854, 1200], 3024, SIZES.region);
 
-/** Plates: the patisserie counter and the montage. */
-export const plateImage = (src) => responsive(src, [640, 1080, 1600], 3429, SIZES.plate);
-
 /**
  * The café interior. A 16:9 photograph whose original is only 1280px wide, so
  * it stops there rather than deriving a 1600 that would be an upscale.
