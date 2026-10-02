@@ -113,4 +113,32 @@ reduced-motion visitor is never left looking at an empty frame.
 
 - No LICENSE file, so GitHub's default applies: all rights reserved. This is a
   commercial site; add one deliberately if that changes.
-- No CI or deploy pipeline. `dist/` is a plain static build.
+
+## Deploying
+
+The site is live at
+**<https://janidumihinwidanagamachchi.github.io/katha-ceylon/>**.
+
+Every push to `main` builds and publishes through
+`.github/workflows/deploy.yml`. Nothing needs to be run by hand.
+
+Two repository **variables** feed the build (Settings → Secrets and variables →
+Actions → Variables). Both are public values, not secrets:
+
+| Variable | Value | Why |
+|---|---|---|
+| `VITE_FALLBACK_API_URL` | `https://katha-stories-2.emergent.host` | Kathā AI and the reservation form call the legacy backend. Without it they would request `/api` on the Pages domain and 404. |
+| `BASE_PATH` | `/katha-ceylon/` | Baked into every asset URL and the router basename. Set it to `/` if a custom domain is ever attached. |
+
+### Two things to know about a Pages subpath
+
+**`npm run preview` now serves at `/katha-ceylon/`**, because preview runs a
+production build and the base is `/katha-ceylon/` there. That is expected.
+
+**Deep links return HTTP 404 with the correct page.** Pages has no rewrite
+rule, so `/katha-ceylon/explore` is a miss and Pages serves `dist/404.html` —
+which is a copy of `index.html`. The body is the right SPA and browsers render
+it normally, but the *status* is 404. That is fine for visitors and bad for
+crawlers: search engines may treat every route as missing and skip indexing
+them. Fixing the status requires serving from the domain root, which means
+either a custom domain or the `janidumihinwidanagamachchi.github.io` repository.
