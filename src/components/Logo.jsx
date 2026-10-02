@@ -1,3 +1,5 @@
+import { asset } from "@/lib/images";
+
 /**
  * The Kathā Ceylon badge is a photographic crop, not an SVG, so the mark and
  * the wordmark are kept separate: the badge is a 42px circle in the navbar and
@@ -5,7 +7,7 @@
  */
 export const LogoMark = ({ size = 42, className = "" }) => (
   <img
-    src="/brand/katha-badge.jpg"
+    src={asset("/brand/katha-badge.jpg")}
     alt=""
     aria-hidden="true"
     width={size}

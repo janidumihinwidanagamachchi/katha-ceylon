@@ -109,8 +109,20 @@ export async function streamChat(sessionId, message, onDelta) {
 
 export const dishUrl = (slug) => `${siteUrl()}/dish/${slug}`;
 
+/**
+ * The public origin of the site, without a trailing slash.
+ *
+ * This feeds the QR codes on the table cards, so it has to be the real
+ * addressable URL. window.location.origin on its own is wrong on a project
+ * Pages site: it would encode "https://user.github.io", which lands on the
+ * user's profile page rather than the café. The deployment base is part of the
+ * address, so it is appended when no explicit URL is configured.
+ */
 export function siteUrl() {
-  return import.meta.env.VITE_SITE_URL || window.location.origin;
+  const base = (import.meta.env.BASE_URL ?? "/").replace(/\/+$/, "");
+  const configured = import.meta.env.VITE_SITE_URL;
+  const url = configured || `${window.location.origin}${base}`;
+  return url.replace(/\/+$/, "");
 }
 
 /** Splits a story into paragraphs on blank lines. */

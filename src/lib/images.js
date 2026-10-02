@@ -29,18 +29,33 @@ const SIZES = {
 };
 
 /**
+ * Prefixes a public asset path with the deployment base.
+ *
+ * Vite rewrites absolute URLs found in HTML and CSS, but it does not touch
+ * absolute paths inside JS string literals — so "/images/dishes/x.jpg" written
+ * in a data file would keep requesting the domain root and 404 on a project
+ * Pages site, which is served from /katha-ceylon/. Rather than prefix all
+ * forty-odd paths in the content files by hand, they stay clean and every one
+ * of them is resolved here, at the point it is turned into a request.
+ *
+ * BASE_URL is "/" in dev and "/katha-ceylon/" in a production build.
+ */
+export const asset = (path) =>
+  `${import.meta.env.BASE_URL ?? "/"}${String(path).replace(/^\/+/, "")}`;
+
+/**
  * @param src      the original's public path, e.g. "/images/dishes/tea-eclair.jpg"
  * @param widths   derived widths that exist alongside it, e.g. [400, 800]
  * @param original the original's intrinsic width, e.g. 1254
  * @param sizes    the sizes attribute for wherever it is rendered
  */
 const responsive = (src, widths, original, sizes) => {
-  const base = src.replace(/\.jpg$/, "");
+  const stem = asset(src).replace(/\.jpg$/, "");
   const candidates = [...new Set([...widths, original])].sort((a, b) => a - b);
   return {
-    src,
+    src: asset(src),
     srcSet: candidates
-      .map((w) => `${w === original ? src : `${base}-${w}.jpg`} ${w}w`)
+      .map((w) => `${w === original ? asset(src) : `${stem}-${w}.jpg`} ${w}w`)
       .join(", "),
     sizes,
   };

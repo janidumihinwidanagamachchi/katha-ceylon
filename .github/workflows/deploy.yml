@@ -1,0 +1,62 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # lets a deploy be triggered by hand from the Actions tab without pushing a
+  # no-op commit
+  workflow_dispatch:
+
+permissions:
+  contents: read   # check out the source
+  pages: write     # publish the artifact
+  id-token: write  # OIDC token the Pages deploy exchanges for credentials
+
+# One deploy at a time. Cancelling in progress means a second push supersedes a
+# half-finished deploy rather than queueing behind it.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        env:
+          # The catalogue is local, so the site builds without this. It is here
+          # because Katha AI and the reservation form call the legacy backend,
+          # and without it they would request /api on the Pages domain and 404.
+          # Held as a repo variable so the backend can be retargeted without
+          # editing this file. It is a public URL, not a secret.
+          VITE_FALLBACK_API_URL: ${{ vars.VITE_FALLBACK_API_URL }}
+          # Overrides the default /katha-ceylon/ base if the repo is renamed or
+          # a custom domain is attached.
+          BASE_PATH: ${{ vars.BASE_PATH }}
+        run: npm run build
+
+      # Also enables Pages on first run if it is not on yet.
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

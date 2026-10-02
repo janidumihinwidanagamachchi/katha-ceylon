@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
+import { asset } from "@/lib/images";
 
 /**
  * The chapter media: a silent looping clip with a photograph underneath it.
@@ -98,8 +99,8 @@ const ChapterPlate = ({
       {useLoop && inView && (
         <video
           ref={videoRef}
-          src={videoSrc}
-          poster={poster}
+          src={asset(videoSrc)}
+          poster={asset(poster)}
           muted
           loop
           playsInline

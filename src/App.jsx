@@ -46,6 +46,14 @@ const ScrollToTop = () => {
   return null;
 };
 
+/**
+ * The deployment base. "/" in dev, "/katha-ceylon/" when a project Pages build
+ * is served from a subpath. React Router wants no trailing slash, hence the
+ * strip - without the basename every route would resolve against the domain
+ * root and 404 on a hard refresh.
+ */
+const BASENAME = (import.meta.env.BASE_URL ?? "/").replace(/\/+$/, "");
+
 function App() {
   useEffect(() => {
     const lenis = createLenis();
@@ -58,7 +66,7 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={BASENAME}>
       {/* min-h svh + flex so a short page still parks the footer at the bottom
           of the screen instead of mid-page. dvh would resize under the URL
           bar; svh is stable and never overflows. */}
