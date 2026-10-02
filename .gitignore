@@ -1,0 +1,26 @@
+# dependencies — 8,800 files, 94MB
+node_modules/
+
+# build output — regenerate with `npm run build`
+dist/
+
+# local environment. This file holds no secrets today (just a public API base
+# URL and the site URL), but it is per-machine configuration and should never
+# be tracked. Copy .env.example to .env and fill it in.
+.env
+.env.local
+.env.*.local
+
+# the untouched originals of the dish artwork, kept outside public/ so they are
+# never served. They exist to let the artwork be re-derived, not to be deployed.
+.dishes-pristine/
+
+# logs
+*.log
+npm-debug.log*
+
+# editor and OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content" />
+    <!-- The status bar takes the colour of the top of the page, which is the
+         sticky header, not the brand colour: 251 250 246 in day, 14 20 17 at
+         night. These match --paper exactly so there is no seam. -->
+    <meta name="theme-color" content="#FBFAF6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0E1411" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="Kathā Ceylon — a Sri Lankan-inspired café. Traditional Flavours. Modern Stories. Journey through Nuwara Eliya, Kurunegala, Galle and Colombo, one dish-story at a time." />
+    <title>Kathā Ceylon — Traditional Flavours. Modern Stories.</title>
+    <!-- Fonts are self-hosted (see src/index.css). These two faces are
+         preloaded because they paint the first screen: the masthead h1 is set
+         in Bodoni and almost everything else is Plex Sans. Preloading the mono
+         face would spend bandwidth on the ledger labels, which are far below
+         the fold. type="font/woff2" lets the browser skip the download if the
+         format is already cached. -->
+    <link rel="preload" href="/fonts/bodoni-moda-var.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/ibm-plex-sans-var.woff2" as="font" type="font/woff2" crossorigin />
+    <script>
+      // Applied before first paint so night mode never flashes light.
+      try {
+        var t = localStorage.getItem("katha-theme");
+        if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.classList.add("dark");
+        }
+      } catch (e) {}
+      // The two theme-color metas answer to the OS, but the visitor's toggle
+      // overrides the OS. Keep both contents in sync with the active class so
+      // either media query still points at the visible page colour. Updating
+      // content (rather than mutating media) also preserves the source mode for
+      // every later toggle.
+      (function () {
+        var root = document.documentElement;
+        var tags = [].slice.call(document.querySelectorAll('meta[name="theme-color"]'));
+        if (!tags.length) return;
+        var apply = function () {
+          var color = root.classList.contains("dark") ? "#0E1411" : "#FBFAF6";
+          tags.forEach(function (m) { m.setAttribute("content", color); });
+        };
+        apply();
+        new MutationObserver(apply).observe(root, { attributes: true, attributeFilter: ["class"] });
+      })();
+    </script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/index.jsx"></script>
+  </body>
+</html>
