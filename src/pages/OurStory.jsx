@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { LogoMark } from "@/components/Logo";
-import { heroImage } from "@/lib/images";
+import { heroImage, spiceImage } from "@/lib/images";
 
-const SPICES_IMG = "/img/ceylon-spices.jpg";
+const SPICES_IMG = spiceImage("/img/spices.jpg");
 const HERO = heroImage("/img/tea-highlands.jpg");
 
 const VALUES = [
@@ -103,13 +103,24 @@ const OurStory = () => (
           </div>
 
           <div className="lg:col-span-5 lg:col-start-8">
-            <figure>
-              <div className="plate aspect-[4/5]">
-                <img src={SPICES_IMG} alt="Ceylon cinnamon and spices" loading="lazy" decoding="async" />
+<figure>
+              {/* 4/3, not the 4/5 it used to be: this photograph is 3:2, and a
+                  portrait crop of a landscape frame throws away half its width.
+                  Dropping the crop also means the 540px source is no longer
+                  upscaled *and* cropped at once. */}
+              <div className="plate aspect-[4/3]">
+                <img
+                  src={SPICES_IMG.src}
+                  srcSet={SPICES_IMG.srcSet}
+                  sizes={SPICES_IMG.sizes}
+                  alt="Ceylon cinnamon sticks, star anise, nutmeg and cloves beside a spoon of ground cinnamon"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
-              <figcaption className="mt-3 flex items-baseline justify-between gap-4 hairline pt-2.5">
+              <figcaption className="mt-3 flex flex-col gap-1 hairline pt-2.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
                 <span className="field tnum">Plate III</span>
-                <span className="text-xs leading-snug text-ink-soft sm:text-[0.8125rem]">
+                <span className="copy max-w-[38ch] text-xs leading-snug text-ink-soft sm:text-[0.8125rem]">
                   True cinnamon, kithul treacle, Ceylon tea
                 </span>
               </figcaption>

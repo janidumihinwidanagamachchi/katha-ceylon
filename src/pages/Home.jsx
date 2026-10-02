@@ -3,16 +3,14 @@ import { Link } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
 import { MaskedLine, PlateIn, RuleDraw } from "@/components/Reveal";
 import DishCard from "@/components/DishCard";
-import RotatingPlate from "@/components/RotatingPlate";
 import { getDishes, getRegions, siteUrl } from "@/lib/api";
 import { regionInk } from "@/content/regions";
-import { montageImage, plateImage, spiceImage } from "@/lib/images";
+import { cafeImage, montageImage } from "@/lib/images";
 
 /* Plate I frames all four chapters at once, so it is a montage rather than a
    photograph of one place. hero-tea.jpg was removed once this replaced it. */
 const HERO_IMG = montageImage("/img/homepagemain.jpg");
-const PATISSERIE_IMG = plateImage("/img/patisserie.jpg");
-const SPICES_IMG = spiceImage("/img/spices.jpg");
+const CAFE_IMG = cafeImage("/img/cafe-interior.jpg");
 
 /* ------------------------------------------------------------------ masthead */
 
@@ -159,19 +157,23 @@ const TwoKitchens = () => (
       <div className="grid grid-cols-1 gap-x-10 gap-y-12 lg:grid-cols-12">
         <div className="lg:col-span-6">
           <figure>
-            {/* the counter, and the spice drawer behind it — crossfading every
-                ten seconds, standing still under reduced motion */}
-            <RotatingPlate
-              frames={[PATISSERIE_IMG, SPICES_IMG]}
-              alt="A patisserie counter of glazed éclairs and tarts, and the Ceylon spice drawer beside it — true cinnamon, star anise, nutmeg and cloves"
-              ratio="aspect-[3/4]"
-              interval={10000}
-              fade={1000}
-            />
+            {/* 4/3 rather than 16:9: the photograph is 16:9, and at an exact fit
+                this plate would only be 427px tall beside a text column of about
+                460px. 4/3 crops about a quarter of the width and balances. */}
+            <div className="plate aspect-[4/3]">
+              <img
+                src={CAFE_IMG.src}
+                srcSet={CAFE_IMG.srcSet}
+                sizes={CAFE_IMG.sizes}
+                alt="Inside the café: an éclair and a tart on a wooden table beside a cooled tea, looking out over the highlands at dusk"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
             <figcaption className="mt-3 flex flex-col gap-1 hairline pt-2.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
               <span className="field tnum">Plate II</span>
               <span className="copy max-w-[38ch] text-xs leading-snug text-ink-soft sm:text-[0.8125rem]">
-                The counter — where French method meets island produce
+                The room
               </span>
             </figcaption>
           </figure>

@@ -74,6 +74,12 @@ export const regionImage = (src) => responsive(src, [480, 854, 1200], 3024, SIZE
 export const plateImage = (src) => responsive(src, [640, 1080, 1600], 3429, SIZES.plate);
 
 /**
+ * The café interior. A 16:9 photograph whose original is only 1280px wide, so
+ * it stops there rather than deriving a 1600 that would be an upscale.
+ */
+export const cafeImage = (src) => responsive(src, [640, 1080], 1280, SIZES.plate);
+
+/**
  * The montage is only 1312px wide to begin with, so it gets no 1600 derivative
  * and the original doubles as its widest candidate.
  */
